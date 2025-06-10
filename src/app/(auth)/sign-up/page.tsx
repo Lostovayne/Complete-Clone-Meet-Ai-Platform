@@ -1,6 +1,6 @@
-import SignUnView from "@/modules/auth/ui/views/sign-up-view";
+import {SignUpView} from "@/modules/auth/ui/views/sign-up-view";
 
 const SignUpPage = () => {
-  return <SignUnView />;
+  return <SignUpView />;
 };
 export default SignUpPage;
