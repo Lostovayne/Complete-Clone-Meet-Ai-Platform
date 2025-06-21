@@ -31,7 +31,7 @@ const firstSection = [
   },
 ];
 
-const secondSection = [
+export const secondSection = [
   {
     icon: StarIcon,
     label: "Upgrade",
