@@ -35,6 +35,8 @@ export const SignUpView = () => {
   const [pending, setPending] = useState<boolean>(false);
   const router = useRouter();
 
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -203,8 +205,8 @@ export const SignUpView = () => {
 
                 <div className="text-center text-sm">
                   Already have an account?{" "}
-                  <Link href="/sign-up" className="underline underline-offset-4 ">
-                    Sign Up
+                  <Link href="/sign-in" className="underline underline-offset-4 ">
+                    Sign In
                   </Link>
                 </div>
               </div>
@@ -219,8 +221,7 @@ export const SignUpView = () => {
       </Card>
 
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{" "}
-        <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );
