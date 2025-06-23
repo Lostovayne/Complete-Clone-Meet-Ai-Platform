@@ -10,13 +10,20 @@ frontend:
         - bun install --frozen-lockfile
     build:
       commands:
+        - env | grep -e DATABASE_URL >> .env
+        - env | grep -e BETTER_AUTH_SECRET >> .env
+        - env | grep -e BETTER_AUTH_URL >> .env
+        - env | grep -e GITHUB_CLIENT_ID >> .env
+        - env | grep -e GITHUB_CLIENT_SECRET >> .env
+        - env | grep -e GOOGLE_CLIENT_ID >> .env
+        - env | grep -e GOOGLE_CLIENT_SECRET >> .env
         # Ejecuta el script de construcción de tu proyecto Next.js
         - bun run build
   artifacts:
     # Para Next.js (con SSR/ISR), el directorio de artefactos es .next
     baseDirectory: .next
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       # Cacha los node_modules para acelerar builds futuros
