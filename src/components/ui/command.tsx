@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "./drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "./drawer";
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
@@ -65,7 +65,7 @@ function CommandResponsiveDialog({
 
   if (isMobile) {
     return (
-      <Dialog {...props}>
+      <Drawer {...props}>
         <DrawerContent className="overflow-hidden p-0">
           <DrawerHeader className="sr-only">
             <DrawerTitle>{title}</DrawerTitle>
@@ -75,7 +75,7 @@ function CommandResponsiveDialog({
             {children}
           </Command>
         </DrawerContent>
-      </Dialog>
+      </Drawer>
     );
   }
 
