@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <TRPCReactProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} antialiased`}>{children}</body>
       </html>
     </TRPCReactProvider>

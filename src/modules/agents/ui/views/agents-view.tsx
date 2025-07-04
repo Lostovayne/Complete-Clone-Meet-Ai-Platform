@@ -8,7 +8,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 const AgentsView = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions());
-
   return <div>{JSON.stringify(data, null, 2)}</div>;
 };
 
@@ -18,7 +17,10 @@ export const AgentsViewLoading = () => {
 
 export const AgentsViewError = () => {
   return (
-    <ErrorState title="Error loading agents" description="Something went wrong while loading the agents" />
+    <ErrorState
+      title="Error loading agents"
+      description="Something went wrong while loading the agents"
+    />
   );
 };
 
