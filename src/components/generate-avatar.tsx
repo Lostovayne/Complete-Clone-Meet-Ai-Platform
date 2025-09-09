@@ -11,7 +11,7 @@ interface GenerateAvatarProps {
 }
 
 const GenerateAvatar = ({ seed, className, variant }: GenerateAvatarProps) => {
-  let avatar;
+  let avatar: ReturnType<typeof createAvatar>;
 
   if (variant === "botttsNeutral") {
     avatar = createAvatar(botttsNeutral, {
