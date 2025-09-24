@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/client";
 
 const inter = Inter({
@@ -10,8 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Meet AI",
-  description:
-    "Create and organize your meetings using automation agents that will help you in your entire process.",
+  description: "Create and organize your meetings using automation agents that will help you in your entire process.",
 };
 
 export default function RootLayout({
@@ -22,7 +22,10 @@ export default function RootLayout({
   return (
     <TRPCReactProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.className} antialiased`}>{children}</body>
+        <body className={`${inter.className} antialiased`}>
+          <Toaster position="top-right" richColors />
+          {children}
+        </body>
       </html>
     </TRPCReactProvider>
   );
