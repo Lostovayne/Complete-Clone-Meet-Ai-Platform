@@ -1,22 +1,20 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
-import { authClient } from "@/lib/auth-client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { OctagonAlertIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { FaGithub, FaGoogle } from "react-icons/fa";
-import { z } from "zod";
 
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { authClient } from "@/lib/auth-client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { OctagonAlertIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaGithub, FaGoogle } from "react-icons/fa";
+import { z } from "zod";
 
 const formSchema = z
   .object({
@@ -212,15 +210,25 @@ export const SignUpView = () => {
           </Form>
 
           <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col items-center justify-center gap-y-4">
-            <img src="/logo.svg" alt="Image logo" className="h-[92px] w-[92px]" />
+            <Image
+              src="/logo.svg"
+              alt="Meet.AI logo"
+              width={92}
+              height={92}
+              style={{
+                width: "auto",
+                height: "auto",
+                maxWidth: "92px",
+                maxHeight: "92px",
+              }}
+            />
             <p className="text-2xl font-semibold text-white">Meet.AI</p>
           </div>
         </CardContent>
       </Card>
 
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{" "}
-        <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );

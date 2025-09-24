@@ -1,9 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
@@ -18,6 +14,9 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import DashboardUserButton from "./dashboard-user-button";
 
 const firstSection = [
@@ -48,7 +47,18 @@ const DashboardSidebar = () => {
     <Sidebar>
       <SidebarHeader className="text-sidebar-accent-foreground">
         <Link href={"/"} className="flex items-center gap-2 px-2 pt-2">
-          <Image src="/logo.svg" height={36} width={36} alt="logo app" />
+          <Image
+            src="/logo.svg"
+            height={36}
+            width={36}
+            alt="logo app"
+            style={{
+              width: "auto",
+              height: "auto",
+              maxWidth: "36px",
+              maxHeight: "36px",
+            }}
+          />
           <p className="text-2xl font-semibold">Meet.AI</p>
         </Link>
       </SidebarHeader>
