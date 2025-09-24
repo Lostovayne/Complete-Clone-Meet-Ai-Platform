@@ -24,9 +24,7 @@ export const ResponsiveDialog = ({ title, description, children, open, onOpenCha
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
-          <section className="p-4" aria-labelledby={`drawer-${titleId}`}>
-            {children}
-          </section>
+          <section className="p-4">{children}</section>
         </DrawerContent>
       </Drawer>
     );
@@ -39,7 +37,7 @@ export const ResponsiveDialog = ({ title, description, children, open, onOpenCha
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <section aria-labelledby={`dialog-${titleId}`}>{children}</section>
+        <section>{children}</section>
       </DialogContent>
     </Dialog>
   );
