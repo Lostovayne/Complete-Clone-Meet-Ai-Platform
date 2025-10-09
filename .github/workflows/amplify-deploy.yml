@@ -24,7 +24,7 @@ jobs:
         bun install
         bun run build
       env:
-        NEXT_PUBLIC_APP_URL: https://dzvoxlsziwhas.amplifyapp.com
+        NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
         
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
