@@ -8,6 +8,8 @@ Next-generation video conferencing powered by AI: smarter, more productive, and 
 
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Lostovayne/meet-ai-platform?utm_source=oss&utm_medium=github&utm_campaign=Lostovayne%2Fmeet-ai-platform&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
+[![Deploy to AWS Amplify](https://github.com/Lostovayne/Complete-Clone-Meet-Ai-Platform/actions/workflows/amplify-deploy.yml/badge.svg)](https://github.com/Lostovayne/Complete-Clone-Meet-Ai-Platform/actions/workflows/amplify-deploy.yml)
+
 | Core Functionality      | AI Capabilities         |
 | ----------------------- | ----------------------- |
 | AI-Powered Video Calls  | Custom Real-time Agents |
@@ -201,7 +203,7 @@ cat > amplify-policy.json << 'EOF'
       "Effect": "Allow",
       "Action": [
         "amplify:CreateDeployment",
-        "amplify:GetDeployment", 
+        "amplify:GetDeployment",
         "amplify:StartDeployment",
         "amplify:GetApp",
         "amplify:GetBranch",
@@ -275,13 +277,14 @@ Ve a tu repositorio en GitHub: **Settings** → **Secrets and variables** → **
 
 Agrega estos 3 secrets obligatorios:
 
-| Secret Name | Descripción | Cómo obtenerlo |
-|-------------|-------------|----------------|
-| `AWS_ROLE_ARN` | ARN del rol IAM creado | `arn:aws:iam::TU_ACCOUNT_ID:role/GitHubActionsAmplifyRole` |
-| `AMPLIFY_APP_ID` | ID de tu aplicación Amplify | Se obtiene al crear la app con `aws amplify create-app` |
-| `AMPLIFY_APP_URL` | URL de tu aplicación desplegada | `https://TU_APP_ID.amplifyapp.com` |
+| Secret Name       | Descripción                     | Cómo obtenerlo                                             |
+| ----------------- | ------------------------------- | ---------------------------------------------------------- |
+| `AWS_ROLE_ARN`    | ARN del rol IAM creado          | `arn:aws:iam::TU_ACCOUNT_ID:role/GitHubActionsAmplifyRole` |
+| `AMPLIFY_APP_ID`  | ID de tu aplicación Amplify     | Se obtiene al crear la app con `aws amplify create-app`    |
+| `AMPLIFY_APP_URL` | URL de tu aplicación desplegada | `https://TU_APP_ID.amplifyapp.com`                         |
 
 **Ejemplo de valores:**
+
 ```
 AWS_ROLE_ARN = arn:aws:iam::123456789012:role/GitHubActionsAmplifyRole
 AMPLIFY_APP_ID = d1a2b3c4d5e6f7
@@ -311,10 +314,11 @@ aws amplify put-app \
 ```
 
 ### 🔐 Ventajas de este setup
+
 ### 🔐 Ventajas de este setup
 
 - ✅ **Sin secretos**: No necesitas AWS_ACCESS_KEY_ID ni AWS_SECRET_ACCESS_KEY
-- ✅ **Seguro**: Credenciales temporales que expiran automáticamente  
+- ✅ **Seguro**: Credenciales temporales que expiran automáticamente
 - ✅ **Granular**: Solo tu repositorio puede desplegar
 - ✅ **Automático**: Deploy en cada push a master
 - ✅ **Auditable**: Todos los accesos quedan en CloudTrail
@@ -356,7 +360,7 @@ frontend:
   artifacts:
     baseDirectory: .next
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
@@ -403,7 +407,7 @@ cat > amplify-policy.json << EOF
       "Effect": "Allow",
       "Action": [
         "amplify:CreateDeployment",
-        "amplify:GetDeployment", 
+        "amplify:GetDeployment",
         "amplify:StartDeployment",
         "amplify:GetApp",
         "amplify:GetBranch",
