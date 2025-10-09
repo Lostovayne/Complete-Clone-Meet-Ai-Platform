@@ -269,83 +269,48 @@ aws iam attach-role-policy \
 aws sts get-caller-identity --query Account --output text
 ```
 
-#### 6. **Actualizar GitHub Action**
+#### 6. **Configurar GitHub Secrets**
 
-Edita `.github/workflows/amplify-deploy.yml` y reemplaza:
-- `TU_ACCOUNT_ID` con tu Account ID
-- `TU_APP_ID` con el App ID de Amplify
-- `TU_DOMINIO` con tu dominio de Amplify
+Ve a tu repositorio en GitHub: **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
 
-```yaml
-name: Deploy to AWS Amplify
+Agrega estos 3 secrets obligatorios:
 
-on:
-  push:
-    branches: [ master ]
+| Secret Name | Descripción | Cómo obtenerlo |
+|-------------|-------------|----------------|
+| `AWS_ROLE_ARN` | ARN del rol IAM creado | `arn:aws:iam::TU_ACCOUNT_ID:role/GitHubActionsAmplifyRole` |
+| `AMPLIFY_APP_ID` | ID de tu aplicación Amplify | Se obtiene al crear la app con `aws amplify create-app` |
+| `AMPLIFY_APP_URL` | URL de tu aplicación desplegada | `https://TU_APP_ID.amplifyapp.com` |
 
-permissions:
-  id-token: write
-  contents: read
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-      
-    - uses: oven-sh/setup-bun@v1
-      with:
-        bun-version: latest
-        
-    - name: Install and build
-      run: |
-        bun install
-        bun run build
-      env:
-        NEXT_PUBLIC_APP_URL: https://TU_DOMINIO.amplifyapp.com
-        
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::TU_ACCOUNT_ID:role/GitHubActionsAmplifyRole
-        aws-region: us-east-1
-        
-    - name: Deploy to Amplify
-      run: |
-        zip -r deploy.zip .next package.json amplify.yml
-        
-        DEPLOYMENT_ID=$(aws amplify create-deployment \
-          --app-id TU_APP_ID \
-          --branch-name master \
-          --query 'deploymentId' \
-          --output text)
-        
-        UPLOAD_URL=$(aws amplify get-deployment \
-          --app-id TU_APP_ID \
-          --branch-name master \
-          --deployment-id $DEPLOYMENT_ID \
-          --query 'deployment.sourceUrl' \
-          --output text)
-        
-        curl -T deploy.zip "$UPLOAD_URL"
-        
-        aws amplify start-deployment \
-          --app-id TU_APP_ID \
-          --branch-name master \
-          --deployment-id $DEPLOYMENT_ID
+**Ejemplo de valores:**
+```
+AWS_ROLE_ARN = arn:aws:iam::123456789012:role/GitHubActionsAmplifyRole
+AMPLIFY_APP_ID = d1a2b3c4d5e6f7
+AMPLIFY_APP_URL = https://d1a2b3c4d5e6f7.amplifyapp.com
 ```
 
-#### 7. **Configurar variables de entorno (opcional)**
+#### 7. **GitHub Action optimizado**
+
+El archivo `.github/workflows/amplify-deploy.yml` ya incluye optimizaciones:
+
+- ✅ **Concurrencia**: Evita múltiples deploys simultáneos
+- ✅ **Cache**: Acelera instalación de dependencias con Bun
+- ✅ **Timeout**: Limita ejecución a 15 minutos
+- ✅ **Cleanup**: Limpia archivos temporales automáticamente
+- ✅ **Triggers**: Se ejecuta en push y PR a master
+- ✅ **Secrets**: Usa variables seguras (no valores hardcodeados)
+- ✅ **Logs**: Feedback claro del proceso de deploy
+
+#### 8. **Configurar variables de entorno (opcional)**
 
 ```bash
-# Agregar variables de entorno a tu app
+# Agregar variables de entorno adicionales a tu app
 aws amplify put-app \
-  --app-id TU_APP_ID \
-  --environment-variables NEXT_PUBLIC_APP_URL=https://TU_DOMINIO.amplifyapp.com \
+  --app-id $AMPLIFY_APP_ID \
+  --environment-variables NEXT_PUBLIC_APP_URL=https://$AMPLIFY_APP_ID.amplifyapp.com \
   --region us-east-1
 ```
 
+### 🔐 Ventajas de este setup
 ### 🔐 Ventajas de este setup
 
 - ✅ **Sin secretos**: No necesitas AWS_ACCESS_KEY_ID ni AWS_SECRET_ACCESS_KEY
