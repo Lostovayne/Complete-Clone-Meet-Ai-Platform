@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { AgentGetOne } from "../../types";
 
 export type Payment = {
   id: string;
@@ -9,21 +10,9 @@ export type Payment = {
   email: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<AgentGetOne>[] = [
   {
     accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
+    header: "Agent Name",
   },
 ];
