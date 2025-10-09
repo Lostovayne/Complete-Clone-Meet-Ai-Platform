@@ -61,15 +61,22 @@ jobs:
     - name: Deploy to Amplify
       run: |
         # Cancelar jobs pendientes
-        aws amplify list-jobs \
+        PENDING_JOBS=$(aws amplify list-jobs \
           --app-id ${{ secrets.AMPLIFY_APP_ID }} \
           --branch-name master \
           --max-results 5 \
           --query 'jobSummaries[?status==`PENDING`].jobId' \
-          --output text | xargs -r -n1 -I {} aws amplify stop-job \
-          --app-id ${{ secrets.AMPLIFY_APP_ID }} \
-          --branch-name master \
-          --job-id {} || true
+          --output text)
+        
+        if [ ! -z "$PENDING_JOBS" ]; then
+          echo "Cancelling pending jobs: $PENDING_JOBS"
+          for job_id in $PENDING_JOBS; do
+            aws amplify stop-job \
+              --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+              --branch-name master \
+              --job-id $job_id || true
+          done
+        fi
         
         # Iniciar nuevo build
         aws amplify start-job \
