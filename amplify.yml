@@ -3,28 +3,18 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Instala bun usando npm, que está disponible en el entorno de Amplify
-        - npm install -g bun
-        # Instala las dependencias del proyecto con bun.
-        # 'bun install' es el equivalente a 'npm ci' y usa el archivo bun.lockb
-        - bun install --frozen-lockfile
+        - curl -fsSL https://bun.sh/install | bash
+        - export PATH="$HOME/.bun/bin:$PATH"
+        - bun install
     build:
       commands:
-        - env | grep -e DATABASE_URL >> .env
-        - env | grep -e BETTER_AUTH_SECRET >> .env
-        - env | grep -e BETTER_AUTH_URL >> .env
-        - env | grep -e GITHUB_CLIENT_ID >> .env
-        - env | grep -e GITHUB_CLIENT_SECRET >> .env
-        - env | grep -e GOOGLE_CLIENT_ID >> .env
-        - env | grep -e GOOGLE_CLIENT_SECRET >> .env
-        # Ejecuta el script de construcción de tu proyecto Next.js
+        - export PATH="$HOME/.bun/bin:$PATH"
         - bun run build
   artifacts:
-    # Para Next.js (con SSR/ISR), el directorio de artefactos es .next
     baseDirectory: .next
     files:
-      - "**/*"
+      - '**/*'
   cache:
     paths:
-      # Cacha los node_modules para acelerar builds futuros
       - node_modules/**/*
+      - .next/cache/**/*

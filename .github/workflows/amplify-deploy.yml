@@ -1,0 +1,57 @@
+name: Deploy to AWS Amplify
+
+on:
+  push:
+    branches: [ master ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+        
+    - name: Install and build
+      run: |
+        bun install
+        bun run build
+      env:
+        NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+        
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsAmplifyRole
+        aws-region: us-east-1
+        
+    - name: Deploy to Amplify
+      run: |
+        zip -r deploy.zip .next package.json amplify.yml
+        
+        DEPLOYMENT_ID=$(aws amplify create-deployment \
+          --app-id dzvoxlsziwhas \
+          --branch-name master \
+          --query 'deploymentId' \
+          --output text)
+        
+        UPLOAD_URL=$(aws amplify get-deployment \
+          --app-id dzvoxlsziwhas \
+          --branch-name master \
+          --deployment-id $DEPLOYMENT_ID \
+          --query 'deployment.sourceUrl' \
+          --output text)
+        
+        curl -T deploy.zip "$UPLOAD_URL"
+        
+        aws amplify start-deployment \
+          --app-id dzvoxlsziwhas \
+          --branch-name master \
+          --deployment-id $DEPLOYMENT_ID
