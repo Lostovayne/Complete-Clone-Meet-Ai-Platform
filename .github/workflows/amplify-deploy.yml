@@ -60,40 +60,24 @@ jobs:
         
     - name: Deploy to Amplify
       run: |
-        # Crear deployment
-        echo "Creating deployment..."
-        DEPLOYMENT_ID=$(aws amplify create-deployment \
+        # Cancelar jobs pendientes
+        aws amplify list-jobs \
           --app-id ${{ secrets.AMPLIFY_APP_ID }} \
           --branch-name master \
-          --query 'deploymentId' \
-          --output text)
-        
-        echo "Deployment ID: $DEPLOYMENT_ID"
-        
-        # Preparar archivos para deploy
-        echo "Preparing deployment package..."
-        zip -r deploy.zip .next package.json amplify.yml -q
-        
-        # Obtener URL de upload
-        UPLOAD_URL=$(aws amplify get-deployment \
+          --max-results 5 \
+          --query 'jobSummaries[?status==`PENDING`].jobId' \
+          --output text | xargs -r -n1 -I {} aws amplify stop-job \
           --app-id ${{ secrets.AMPLIFY_APP_ID }} \
           --branch-name master \
-          --deployment-id $DEPLOYMENT_ID \
-          --query 'deployment.sourceUrl' \
-          --output text)
+          --job-id {} || true
         
-        # Subir archivos
-        echo "Uploading deployment package..."
-        curl -T deploy.zip "$UPLOAD_URL" --silent --show-error
-        
-        # Iniciar deployment
-        echo "Starting deployment..."
-        aws amplify start-deployment \
+        # Iniciar nuevo build
+        aws amplify start-job \
           --app-id ${{ secrets.AMPLIFY_APP_ID }} \
           --branch-name master \
-          --deployment-id $DEPLOYMENT_ID
+          --job-type RELEASE
           
-        echo "✅ Deployment started successfully!"
+        echo "✅ Deployment started!"
         echo "🚀 App URL: ${{ secrets.AMPLIFY_APP_URL }}"
         
     - name: Cleanup
