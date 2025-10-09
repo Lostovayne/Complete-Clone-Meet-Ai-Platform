@@ -5,6 +5,17 @@ import { LoadingState } from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
+// Mock Data
+
+const mockData = [
+  {
+    id: "187271",
+    amount: 100,
+    status: "pending",
+    email: "john.doe@example.com",
+  },
+];
+
 const AgentsView = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions());
@@ -12,7 +23,12 @@ const AgentsView = () => {
 };
 
 export const AgentsViewLoading = () => {
-  return <LoadingState title="Loading Agents" description="This may take a few seconds" />;
+  return (
+    <LoadingState
+      title="Loading Agents"
+      description="This may take a few seconds"
+    />
+  );
 };
 
 export const AgentsViewError = () => {
