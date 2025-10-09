@@ -60,29 +60,35 @@ jobs:
         
     - name: Deploy to Amplify
       run: |
-        # Cancelar jobs pendientes
-        PENDING_JOBS=$(aws amplify list-jobs \
+        # Crear deployment
+        echo "Creating deployment..."
+        DEPLOYMENT_ID=$(aws amplify create-deployment \
           --app-id ${{ secrets.AMPLIFY_APP_ID }} \
           --branch-name master \
-          --max-results 5 \
-          --query 'jobSummaries[?status==`PENDING`].jobId' \
+          --query 'deploymentId' \
           --output text)
         
-        if [ ! -z "$PENDING_JOBS" ]; then
-          echo "Cancelling pending jobs: $PENDING_JOBS"
-          for job_id in $PENDING_JOBS; do
-            aws amplify stop-job \
-              --app-id ${{ secrets.AMPLIFY_APP_ID }} \
-              --branch-name master \
-              --job-id $job_id || true
-          done
-        fi
+        echo "Deployment ID: $DEPLOYMENT_ID"
         
-        # Iniciar nuevo build
-        aws amplify start-job \
+        # Crear ZIP con archivos necesarios
+        zip -r deploy.zip .next package.json amplify.yml public -q
+        
+        # Subir archivos usando la URL del deployment
+        UPLOAD_URL=$(aws amplify create-deployment \
           --app-id ${{ secrets.AMPLIFY_APP_ID }} \
           --branch-name master \
-          --job-type RELEASE
+          --query 'zipUploadUrl' \
+          --output text)
+        
+        echo "Uploading files..."
+        curl -T deploy.zip "$UPLOAD_URL" --silent --show-error
+        
+        # Iniciar deployment
+        echo "Starting deployment..."
+        aws amplify start-deployment \
+          --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+          --branch-name master \
+          --deployment-id $DEPLOYMENT_ID
           
         echo "✅ Deployment started!"
         echo "🚀 App URL: ${{ secrets.AMPLIFY_APP_URL }}"
