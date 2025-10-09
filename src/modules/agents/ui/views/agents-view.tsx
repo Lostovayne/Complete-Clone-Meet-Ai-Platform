@@ -22,6 +22,8 @@ const AgentsView = () => {
   return <div>{JSON.stringify(data, null, 2)}</div>;
 };
 
+console.log(mockData);
+
 export const AgentsViewLoading = () => {
   return (
     <LoadingState
