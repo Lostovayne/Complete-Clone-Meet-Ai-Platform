@@ -11,5 +11,18 @@
       "StackId": "arn:aws:cloudformation:us-east-1:630766392221:stack/amplify-amplifye9ef6a026c5c4-staging-e2c08/55f8ab60-a4c8-11f0-96c0-0affd8188ba5",
       "AmplifyAppId": "dzvoxlsziwhas"
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-meetaiplatform-dev-61cb1-authRole",
+      "UnauthRoleArn": "arn:aws:iam::630766392221:role/amplify-meetaiplatform-dev-61cb1-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::630766392221:role/amplify-meetaiplatform-dev-61cb1-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-meetaiplatform-dev-61cb1-deployment",
+      "UnauthRoleName": "amplify-meetaiplatform-dev-61cb1-unauthRole",
+      "StackName": "amplify-meetaiplatform-dev-61cb1",
+      "StackId": "arn:aws:cloudformation:us-east-1:630766392221:stack/amplify-meetaiplatform-dev-61cb1/3720ef60-a4d5-11f0-930b-12093355b107",
+      "AmplifyAppId": "dzvoxlsziwhas"
+    }
   }
 }
