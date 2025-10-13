@@ -52,10 +52,9 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
 
   // Focus management for accessibility
   useEffect(() => {
-    // Focus the first input when the form mounts (dialog opens)
     const timer = setTimeout(() => {
       firstInputRef.current?.focus();
-    }, 100); // Small delay to ensure dialog is fully opened
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);
