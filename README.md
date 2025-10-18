@@ -8,8 +8,6 @@ Next-generation video conferencing powered by AI: smarter, more productive, and 
 
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Lostovayne/meet-ai-platform?utm_source=oss&utm_medium=github&utm_campaign=Lostovayne%2Fmeet-ai-platform&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
-[![Deploy to AWS Amplify](https://github.com/Lostovayne/Complete-Clone-Meet-Ai-Platform/actions/workflows/amplify-deploy.yml/badge.svg)](https://github.com/Lostovayne/Complete-Clone-Meet-Ai-Platform/actions/workflows/amplify-deploy.yml)
-
 | Core Functionality      | AI Capabilities         |
 | ----------------------- | ----------------------- |
 | AI-Powered Video Calls  | Custom Real-time Agents |
