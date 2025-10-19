@@ -6,40 +6,46 @@ import { z } from "zod";
 import { agentInsertSchema } from "../schemas";
 
 export const agentsRouter = createTRPCRouter({
-  getOne: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      const [existingAgent] = await db
-        .select({
-          meetingCount: sql<number>`5`,
-          ...getTableColumns(agents),
-        })
-        .from(agents)
-        .where(eq(agents.id, input.id));
-      return existingAgent;
-    }),
-
-  getMany: protectedProcedure.query(async () => {
-    const data = await db
+  getOne: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
+    const [existingAgent] = await db
       .select({
         meetingCount: sql<number>`5`,
         ...getTableColumns(agents),
       })
-      .from(agents);
-    return data;
+      .from(agents)
+      .where(eq(agents.id, input.id));
+    return existingAgent;
   }),
 
-  // -> Protected Procedure with input validation Schema
-  create: protectedProcedure
-    .input(agentInsertSchema)
-    .mutation(async ({ input, ctx }) => {
-      const [createdAgent] = await db
-        .insert(agents)
-        .values({
-          ...input,
-          userId: ctx.auth.user.id,
+  getMany: protectedProcedure
+    .input(
+      z
+        .object({
+          page: z.number().default(1),
+          pageSize: z.number().min(1).max(100).default(10),
+          search: z.string().nullish(),
         })
-        .returning();
-      return createdAgent;
+        .optional()
+    )
+    .query(async () => {
+      const data = await db
+        .select({
+          meetingCount: sql<number>`5`,
+          ...getTableColumns(agents),
+        })
+        .from(agents);
+      return data;
     }),
+
+  // -> Protected Procedure with input validation Schema
+  create: protectedProcedure.input(agentInsertSchema).mutation(async ({ input, ctx }) => {
+    const [createdAgent] = await db
+      .insert(agents)
+      .values({
+        ...input,
+        userId: ctx.auth.user.id,
+      })
+      .returning();
+    return createdAgent;
+  }),
 });
