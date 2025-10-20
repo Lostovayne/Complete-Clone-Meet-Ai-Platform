@@ -26,12 +26,20 @@ const AgentsView = () => {
 };
 
 export const AgentsViewLoading = () => {
-  return <LoadingState title="Loading Agents" description="This may take a few seconds" />;
+  return (
+    <LoadingState
+      title="Loading Agents"
+      description="This may take a few seconds"
+    />
+  );
 };
 
 export const AgentsViewError = () => {
   return (
-    <ErrorState title="Error loading agents" description="Something went wrong while loading the agents" />
+    <ErrorState
+      title="Error loading agents"
+      description="Something went wrong while loading the agents"
+    />
   );
 };
 
