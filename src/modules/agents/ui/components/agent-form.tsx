@@ -1,6 +1,13 @@
 import GenerateAvatar from "@/components/generate-avatar";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTRPC } from "@/trpc/client";
@@ -19,7 +26,11 @@ interface AgentFormProps {
   initialValues?: AgentGetOne;
 }
 
-export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps) => {
+export const AgentForm = ({
+  onSuccess,
+  onCancel,
+  initialValues,
+}: AgentFormProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -27,10 +38,14 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+        await queryClient.invalidateQueries(
+          trpc.agents.getMany.queryOptions({}),
+        );
 
         if (initialValues?.id) {
-          await queryClient.invalidateQueries(trpc.agents.getOne.queryOptions({ id: initialValues.id }));
+          await queryClient.invalidateQueries(
+            trpc.agents.getOne.queryOptions({ id: initialValues.id }),
+          );
         }
 
         onSuccess?.();
@@ -39,7 +54,7 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
         toast.error(`Error creating agent: ${error.message}`);
         // TODO: Check if error code is 'CONFLICT' and show a specific message
       },
-    })
+    }),
   );
 
   const form = useForm<z.infer<typeof agentInsertSchema>>({
@@ -73,7 +88,11 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <GenerateAvatar seed={form.watch("name")} variant="botttsNeutral" className="border size-16" />
+        <GenerateAvatar
+          seed={form.watch("name")}
+          variant="botttsNeutral"
+          className="border size-16"
+        />
         <FormField
           name="name"
           control={form.control}
@@ -81,7 +100,11 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} ref={firstInputRef} placeholder="Enter agent name" />
+                <Input
+                  {...field}
+                  ref={firstInputRef}
+                  placeholder="Enter agent name"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -106,7 +129,13 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
         />
         <div className="flex justify-between gap-x-2">
           {onCancel && (
-            <Button onClick={onCancel} disabled={isPending} variant="ghost" className="mr-2" type="button">
+            <Button
+              onClick={onCancel}
+              disabled={isPending}
+              variant="ghost"
+              className="mr-2"
+              type="button"
+            >
               Cancel
             </Button>
           )}
