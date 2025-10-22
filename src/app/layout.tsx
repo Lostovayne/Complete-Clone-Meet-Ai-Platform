@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { NuqsAdapter } from "nuqs/adapters/next";
+
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/client";
 
@@ -11,7 +13,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Meet AI",
-  description: "Create and organize your meetings using automation agents that will help you in your entire process.",
+  description:
+    "Create and organize your meetings using automation agents that will help you in your entire process.",
 };
 
 export default function RootLayout({
@@ -20,13 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <TRPCReactProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.className} antialiased`}>
-          <Toaster position="top-right" richColors />
-          {children}
-        </body>
-      </html>
-    </TRPCReactProvider>
+    <NuqsAdapter>
+      <TRPCReactProvider>
+        <html lang="en" suppressHydrationWarning>
+          <body className={`${inter.className} antialiased`}>
+            <Toaster position="top-right" richColors />
+            {children}
+          </body>
+        </html>
+      </TRPCReactProvider>
+    </NuqsAdapter>
   );
 }
