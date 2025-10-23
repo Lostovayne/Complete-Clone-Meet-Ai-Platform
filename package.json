@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "inggest": "bunx inngest-cli@latest dev"
   },
   "dependencies": {
     "@dicebear/collection": "^9.2.4",
