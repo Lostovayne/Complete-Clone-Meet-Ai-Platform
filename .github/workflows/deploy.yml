@@ -1,0 +1,76 @@
+name: Build and Push to Multiple Registries
+
+"on":
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GHCR_REGISTRY: ghcr.io
+  IMAGE_NAME: meet-ai-platform
+  DOCKERFILE_PATH: dockerfile.prod
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Para GHCR
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Login a GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Convert repository name to lowercase
+        id: repo
+        run: echo "name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
+          >> $GITHUB_OUTPUT
+
+      # Build una sola vez con múltiples tags
+      - name: Build Docker image
+        run: |
+          docker build \
+            --file ${{ env.DOCKERFILE_PATH }} \
+            --tag ${{ env.GHCR_REGISTRY }}/${{ steps.repo.outputs.name }}:latest \
+            .
+
+      - name: Check image size
+        run: |
+          echo "📊 Image size information:"
+          docker images ${{ env.GHCR_REGISTRY }}/${{ steps.repo.outputs.name }}:latest \
+            --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
+      # Push a GitHub Container Registry
+      - name: Push to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker push ${{ env.GHCR_REGISTRY }}/${{ steps.repo.outputs.name }}:latest
+
+      - name: Output image info
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "🚀 Images pushed successfully!"
+          echo ""
+          echo "📦 GitHub Container Registry (for Railway):"
+          echo "   ${{ env.GHCR_REGISTRY }}/${{ steps.repo.outputs.name }}:latest"
+          echo ""
+          echo "💡 Use the GHCR image in Railway!"
