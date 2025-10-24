@@ -22,13 +22,17 @@ const AuthCheck = async ({ children }: DashboardLayoutProps) => {
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <SidebarProvider>
-      <DashboardSidebar />
-      <main className="flex flex-col h-screen w-screen bg-muted">
-        <DashboardNavbar />
-        <Suspense fallback={<LoadingState title="Loading..." description="Please wait a moment " />}>
-          <AuthCheck>{children}</AuthCheck>
-        </Suspense>
-      </main>
+      <Suspense fallback={<LoadingState title="Loading layout..." description="Please wait a moment" />}>
+        <DashboardSidebar />
+        <main className="flex flex-col h-screen w-screen bg-muted">
+          <DashboardNavbar />
+          <Suspense
+            fallback={<LoadingState title="Loading Agent..." description="Please wait a moment " />}
+          >
+            <AuthCheck>{children}</AuthCheck>
+          </Suspense>
+        </main>
+      </Suspense>
     </SidebarProvider>
   );
 };
