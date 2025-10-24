@@ -46,19 +46,8 @@ const DashboardSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader className="text-sidebar-accent-foreground">
-        <Link href={"/"} className="flex items-center gap-2 px-2 pt-2">
-          <Image
-            src="/logo.svg"
-            height={36}
-            width={36}
-            alt="logo app"
-            style={{
-              width: "auto",
-              height: "auto",
-              maxWidth: "36px",
-              maxHeight: "36px",
-            }}
-          />
+        <Link href={"/"} className="flex items-center gap-2 px-2 pt-2 size-13">
+          <Image src="/logo.svg" height={36} width={36} alt="logo app" className="" />
           <p className="text-2xl font-semibold">Meet.AI</p>
         </Link>
       </SidebarHeader>
