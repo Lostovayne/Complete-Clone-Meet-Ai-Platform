@@ -164,7 +164,7 @@ export const SignUpView = () => {
 
                 {!!error && (
                   <Alert className="bg-destructive/10 border-none">
-                    <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
+                    <OctagonAlertIcon className="h-4 w-4 text-destructive" />
                     <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
@@ -174,7 +174,9 @@ export const SignUpView = () => {
                 </Button>
 
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                  <span className="bg-card text-muted-foreground relative z-10 px-2">Or continue with</span>
+                  <span className="bg-card text-muted-foreground relative z-10 px-2">
+                    Or continue with
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -228,7 +230,8 @@ export const SignUpView = () => {
       </Card>
 
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{" "}
+        <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );
