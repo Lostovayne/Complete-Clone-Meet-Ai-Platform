@@ -61,12 +61,12 @@ jobs:
 
       # Push a GitHub Container Registry
       - name: Push to GitHub Container Registry
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           docker push ${{ env.GHCR_REGISTRY }}/${{ steps.repo.outputs.name }}:latest
 
       - name: Output image info
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "🚀 Images pushed successfully!"
           echo ""
