@@ -1,7 +1,7 @@
 # ====================================================================================
 # Etapa 1: Dependencies - Instala todas las dependencias
 # ====================================================================================
-FROM oven/bun:alpine AS deps
+FROM oven/bun:latest AS deps
 WORKDIR /app
 
 # Copia los archivos de dependencias
@@ -13,8 +13,11 @@ RUN bun install --frozen-lockfile
 # ====================================================================================
 # Etapa 2: Builder - Compila la aplicación Next.js
 # ====================================================================================
-FROM oven/bun:alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
+
+# Instala bun globalmente para usarlo en el build
+RUN npm install -g bun
 
 # Copia las dependencias instaladas
 COPY --from=deps /app/node_modules ./node_modules
@@ -25,16 +28,13 @@ COPY . .
 # Deshabilita la telemetría durante el build
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Genera el cliente Prisma
-# RUN bunx prisma generate
-
 # Compila la aplicación con salida standalone
 RUN bun run build
 
 # ====================================================================================
 # Etapa 3: Runner - Crea la imagen final de producción
 # ====================================================================================
-FROM oven/bun:alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Establece el entorno a producción
