@@ -1,4 +1,9 @@
-import { ChevronRightIcon, MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
+import {
+  ChevronRightIcon,
+  MoreVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -23,7 +28,12 @@ interface Props {
   onRemove: () => void;
 }
 
-export const AgentIdViewHeader = ({ agentId, agentName, onEdit, onRemove }: Props) => {
+export const AgentIdViewHeader = ({
+  agentId,
+  agentName,
+  onEdit,
+  onRemove,
+}: Props) => {
   return (
     <div className="flex items-center justify-between">
       <Breadcrumb>
