@@ -1,6 +1,6 @@
 name: Build and Push to Multiple Registries
 
-"on":
+on:
   push:
     branches:
       - master
