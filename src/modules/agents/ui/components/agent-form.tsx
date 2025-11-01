@@ -1,13 +1,6 @@
 import GenerateAvatar from "@/components/generate-avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTRPC } from "@/trpc/client";
@@ -26,11 +19,7 @@ interface AgentFormProps {
   initialValues?: AgentGetOne;
 }
 
-export const AgentForm = ({
-  onSuccess,
-  onCancel,
-  initialValues,
-}: AgentFormProps) => {
+export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -38,23 +27,34 @@ export const AgentForm = ({
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.agents.getMany.queryOptions({}),
-        );
-
-        if (initialValues?.id) {
-          await queryClient.invalidateQueries(
-            trpc.agents.getOne.queryOptions({ id: initialValues.id }),
-          );
-        }
-
+        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+        // TODO: Invalidate free tier usage
         onSuccess?.();
       },
       onError: (error) => {
         toast.error(`Error creating agent: ${error.message}`);
         // TODO: Check if error code is 'CONFLICT' and show a specific message
       },
-    }),
+    })
+  );
+
+  const updateAgent = useMutation(
+    trpc.agents.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+
+        if (initialValues?.id) {
+          await queryClient.invalidateQueries(trpc.agents.getOne.queryOptions({ id: initialValues.id }));
+        }
+
+        onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error(`Error updating agent: ${error.message}`);
+        // TODO: Check if error code is 'CONFLICT' and show a specific message
+        // TODO: Check if error code is FORBIDDEN, redirect to "/upgrade"
+      },
+    })
   );
 
   const form = useForm<z.infer<typeof agentInsertSchema>>({
@@ -75,11 +75,11 @@ export const AgentForm = ({
   }, []);
 
   const isEdit = !!initialValues?.id;
-  const isPending = createAgent.isPending;
+  const isPending = createAgent.isPending || updateAgent.isPending;
 
   const onSubmit = (values: z.infer<typeof agentInsertSchema>) => {
     if (isEdit) {
-      console.log("TODO: updatedAgent");
+      updateAgent.mutate({ id: initialValues.id, ...values });
     } else {
       createAgent.mutate(values);
     }
@@ -88,11 +88,7 @@ export const AgentForm = ({
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <GenerateAvatar
-          seed={form.watch("name")}
-          variant="botttsNeutral"
-          className="border size-16"
-        />
+        <GenerateAvatar seed={form.watch("name")} variant="botttsNeutral" className="border size-16" />
         <FormField
           name="name"
           control={form.control}
@@ -100,11 +96,7 @@ export const AgentForm = ({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  ref={firstInputRef}
-                  placeholder="Enter agent name"
-                />
+                <Input {...field} ref={firstInputRef} placeholder="Enter agent name" />
               </FormControl>
               <FormMessage />
             </FormItem>
