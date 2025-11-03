@@ -39,7 +39,7 @@ const AgentsData = async ({ searchParams }: Props) => {
 const AgentsPage = ({ searchParams }: Props) => {
   return (
     <Suspense fallback={<AgentsViewLoading />}>
-      <ErrorBoundary FallbackComponent={AgentsViewError}>
+      <ErrorBoundary fallback={<AgentsViewError />}>
         <AgentsData searchParams={searchParams} />
       </ErrorBoundary>
     </Suspense>
