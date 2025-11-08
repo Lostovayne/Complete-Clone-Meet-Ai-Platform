@@ -5,8 +5,22 @@ import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
 import { z } from "zod";
+import { meetingsInsertSchema } from "../schemas";
 
 export const meetingsRouter = createTRPCRouter({
+  create: protectedProcedure.input(meetingsInsertSchema).mutation(async ({ input, ctx }) => {
+    const [createdMeeting] = await db
+      .insert(meetings)
+      .values({
+        ...input,
+        userId: ctx.auth.user.id,
+      })
+      .returning();
+    // TODO: Create Stream Call, Upsert Stream Users
+
+    return createdMeeting;
+  }),
+
   getOne: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input, ctx }) => {
     const [existingMeeting] = await db
       .select({
