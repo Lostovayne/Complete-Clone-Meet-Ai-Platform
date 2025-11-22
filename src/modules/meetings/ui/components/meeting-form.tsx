@@ -1,0 +1,132 @@
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useTRPC } from "@/trpc/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+
+import { meetingsInsertSchema } from "../../schemas";
+import { MeetingGetOne } from "../../types";
+
+interface MeetingFormProps {
+  onSuccess?: (id?: string) => void;
+  onCancel?: () => void;
+  initialValues?: MeetingGetOne;
+}
+
+export const MeetingForm = ({ onSuccess, onCancel, initialValues }: MeetingFormProps) => {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  const createMeeting = useMutation(
+    trpc.meetings.create.mutationOptions({
+      onSuccess: async (data) => {
+        await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
+        // TODO: Invalidate free tier usage
+        onSuccess?.(data.id);
+      },
+      onError: (error) => {
+        toast.error(`Error creating meeting: ${error.message}`);
+        // TODO: Check if error code is 'CONFLICT' and show a specific message
+      },
+    })
+  );
+
+  const updateMeeting = useMutation(
+    trpc.meetings.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
+
+        if (initialValues?.id) {
+          await queryClient.invalidateQueries(
+            trpc.meetings.getOne.queryOptions({ id: initialValues.id })
+          );
+        }
+
+        onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error(`Error updating agent: ${error.message}`);
+        // TODO: Check if error code is 'CONFLICT' and show a specific message
+        // TODO: Check if error code is FORBIDDEN, redirect to "/upgrade"
+      },
+    })
+  );
+
+  const form = useForm<z.infer<typeof meetingsInsertSchema>>({
+    resolver: zodResolver(meetingsInsertSchema),
+    defaultValues: {
+      name: initialValues?.name ?? "",
+      agentId: initialValues?.agentId ?? "",
+    },
+  });
+
+  // Focus management for accessibility
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      firstInputRef.current?.focus();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const isEdit = !!initialValues?.id;
+  const isPending = createMeeting.isPending || updateMeeting.isPending;
+
+  const onSubmit = (values: z.infer<typeof meetingsInsertSchema>) => {
+    if (isEdit) {
+      updateMeeting.mutate({ id: initialValues.id, ...values });
+    } else {
+      createMeeting.mutate(values);
+    }
+  };
+
+  return (
+    <Form {...form}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          name="name"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Enter meeting name" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex justify-between gap-x-2">
+          {onCancel && (
+            <Button
+              onClick={onCancel}
+              disabled={isPending}
+              variant="ghost"
+              className="mr-2"
+              type="button"
+            >
+              Cancel
+            </Button>
+          )}
+          <Button type="submit" disabled={isPending}>
+            {isEdit ? "Update Meeting" : "Create Meeting"}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+};
