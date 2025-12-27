@@ -79,7 +79,11 @@ const DashboardSidebar = () => {
                       pathname === item.href && "bg-liner-to-r/oklch border-[#5D6B68]/10"
                     )}
                   >
-                    <Link href={item.href}>
+                    <Link
+                      href={{
+                        pathname: item.href,
+                      }}
+                    >
                       <item.icon className="size-5" />
                       <span className="text-sm font-medium tracking-tight">
                         {item.label}
@@ -108,7 +112,11 @@ const DashboardSidebar = () => {
                       pathname === item.href && "bg-liner-to-r/oklch border-[#5D6B68]/10"
                     )}
                   >
-                    <Link href={item.href}>
+                    <Link
+                      href={{
+                        pathname: item.href,
+                      }}
+                    >
                       <item.icon className="size-5" />
                       <span className="text-sm font-medium tracking-tight">
                         {item.label}
