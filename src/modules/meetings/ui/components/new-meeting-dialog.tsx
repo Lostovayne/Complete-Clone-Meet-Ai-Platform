@@ -22,7 +22,7 @@ const NewMeetingDialog: React.FC<NewMeetingDialogProps> = ({ open, onOpenChange 
           onOpenChange(false);
           router.push(`/meetings/${id}`);
         }}
-        onCancel={() => onOpenChange}
+        onCancel={() => onOpenChange(false)}
       />
     </ResponsiveDialog>
   );
