@@ -10,7 +10,7 @@ interface GenerateAvatarProps {
   variant: "botttsNeutral" | "initials";
 }
 
-const GenerateAvatar = ({ seed, className, variant }: GenerateAvatarProps) => {
+export const GenerateAvatar = ({ seed, className, variant }: GenerateAvatarProps) => {
   let avatar: ReturnType<typeof createAvatar>;
 
   if (variant === "botttsNeutral") {
@@ -32,5 +32,3 @@ const GenerateAvatar = ({ seed, className, variant }: GenerateAvatarProps) => {
     </Avatar>
   );
 };
-
-export default GenerateAvatar;

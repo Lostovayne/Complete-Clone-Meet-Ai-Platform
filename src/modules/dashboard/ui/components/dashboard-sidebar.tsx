@@ -47,7 +47,18 @@ const DashboardSidebar = () => {
     <Sidebar>
       <SidebarHeader className="text-sidebar-accent-foreground">
         <Link href={"/"} className="flex items-center gap-2 px-2 pt-2 size-13">
-          <Image src="/logo.svg" height={36} width={36} alt="logo app" className="" />
+          <Image
+            src="/logo.svg"
+            height={36}
+            width={36}
+            alt="logo app"
+            style={{
+              width: "auto",
+              height: "auto",
+              maxWidth: "72px",
+              maxHeight: "72px",
+            }}
+          />
           <p className="text-2xl font-semibold">Meet.AI</p>
         </Link>
       </SidebarHeader>
@@ -70,7 +81,9 @@ const DashboardSidebar = () => {
                   >
                     <Link href={item.href}>
                       <item.icon className="size-5" />
-                      <span className="text-sm font-medium tracking-tight">{item.label}</span>
+                      <span className="text-sm font-medium tracking-tight">
+                        {item.label}
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -97,7 +110,9 @@ const DashboardSidebar = () => {
                   >
                     <Link href={item.href}>
                       <item.icon className="size-5" />
-                      <span className="text-sm font-medium tracking-tight">{item.label}</span>
+                      <span className="text-sm font-medium tracking-tight">
+                        {item.label}
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

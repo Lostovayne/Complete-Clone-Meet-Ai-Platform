@@ -8,11 +8,13 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 export const MeetingsView = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.meetings.getMany.queryOptions({}));
-  return <div>TODO DATA RENDERING</div>;
+  return <div className="overflow-x-scroll">{JSON.stringify(data)}</div>;
 };
 
 export const MeetingsViewLoading = () => {
-  return <LoadingState title="Loading Meetings" description="This may take a few seconds" />;
+  return (
+    <LoadingState title="Loading Meetings" description="This may take a few seconds" />
+  );
 };
 
 export const MeetingsViewError = () => {

@@ -3,7 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
-import GenerateAvatar from "@/components/generate-avatar";
+import { GenerateAvatar } from "@/components/generate-avatar";
 import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -61,7 +61,11 @@ const DashboardUserButton = () => {
               <AvatarImage src={data.user.image} alt="Avatar Image" />
             </Avatar>
           ) : (
-            <GenerateAvatar seed={data.user.name} variant="initials" className="size-9 mr-3" />
+            <GenerateAvatar
+              seed={data.user.name}
+              variant="initials"
+              className="size-9 mr-3"
+            />
           )}
           <div className="flex flex-col gap-0.5  text-left overflow-hidden flex-1 min-w-0">
             <p className="text-sm truncate w-full">{data.user.name}</p>
@@ -99,7 +103,11 @@ const DashboardUserButton = () => {
             <AvatarImage src={data.user.image} alt="Avatar Image" />
           </Avatar>
         ) : (
-          <GenerateAvatar seed={data.user.name} variant="initials" className="size-9 mr-3" />
+          <GenerateAvatar
+            seed={data.user.name}
+            variant="initials"
+            className="size-9 mr-3"
+          />
         )}
         <div className="flex flex-col gap-0.5  text-left overflow-hidden flex-1 min-w-0">
           <p className="text-sm truncate w-full">{data.user.name}</p>
@@ -111,7 +119,9 @@ const DashboardUserButton = () => {
         <DropdownMenuLabel>
           <div className="flex flex-col gap-1">
             <span className="font-medium truncate">{data.user.name}</span>
-            <span className="text-sm font-normal text-muted-foreground truncate">{data.user.email}</span>
+            <span className="text-sm font-normal text-muted-foreground truncate">
+              {data.user.email}
+            </span>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -119,7 +129,10 @@ const DashboardUserButton = () => {
           Billing
           <CreditCardIcon className="size-4" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={onLogout} className="cursor-pointer flex items-center justify-between">
+        <DropdownMenuItem
+          onClick={onLogout}
+          className="cursor-pointer flex items-center justify-between"
+        >
           Logout
           <LogOutIcon className="size-4" />
         </DropdownMenuItem>

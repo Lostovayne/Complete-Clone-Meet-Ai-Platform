@@ -1,6 +1,13 @@
-import GenerateAvatar from "@/components/generate-avatar";
+import { GenerateAvatar } from "@/components/generate-avatar";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTRPC } from "@/trpc/client";
@@ -44,7 +51,9 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
         await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
 
         if (initialValues?.id) {
-          await queryClient.invalidateQueries(trpc.agents.getOne.queryOptions({ id: initialValues.id }));
+          await queryClient.invalidateQueries(
+            trpc.agents.getOne.queryOptions({ id: initialValues.id })
+          );
         }
 
         onSuccess?.();
@@ -88,7 +97,11 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <GenerateAvatar seed={form.watch("name")} variant="botttsNeutral" className="border size-16" />
+        <GenerateAvatar
+          seed={form.watch("name")}
+          variant="botttsNeutral"
+          className="border size-16"
+        />
         <FormField
           name="name"
           control={form.control}
