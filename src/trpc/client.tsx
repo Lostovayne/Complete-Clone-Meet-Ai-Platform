@@ -31,7 +31,7 @@ function getUrl() {
 export function TRPCReactProvider(
   props: Readonly<{
     children: React.ReactNode;
-  }>
+  }>,
 ) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
@@ -46,7 +46,7 @@ export function TRPCReactProvider(
           url: getUrl(),
         }),
       ],
-    })
+    }),
   );
   return (
     <QueryClientProvider client={queryClient}>
